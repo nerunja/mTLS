@@ -1,0 +1,55 @@
+nerunja@xps:~/ws/mTLS$ keytool -genkeypair -alias root-ca -keyalg RSA -keysize 2048 -keystore root-ca.jks -validity 3650 -storepass rootpass -keypass rootpass -dname "CN=Root CA,OU=MyOrg,O=MyCompany,L=MyCity,ST=MyState,C=US"
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 3,650 days
+        for: CN=Root CA, OU=MyOrg, O=MyCompany, L=MyCity, ST=MyState, C=US
+nerunja@xps:~/ws/mTLS$ keytool -exportcert -alias root-ca -keystore root-ca.jks -storepass rootpass -file root-ca.cer
+Certificate stored in file <root-ca.cer>
+nerunja@xps:~/ws/mTLS$ keytool -genkeypair -alias intermediate-ca -keyalg RSA -keysize 2048 -keystore intermediate-ca.jks -validity 3650 -storepass intermediatepass -keypass intermediatepass -dname "CN=Intermediate CA,OU=MyOrg,O=MyCompany,L=MyCity,ST=MyState,C=US"
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 3,650 days
+        for: CN=Intermediate CA, OU=MyOrg, O=MyCompany, L=MyCity, ST=MyState, C=US
+nerunja@xps:~/ws/mTLS$ keytool -certreq -alias intermediate-ca -keystore intermediate-ca.jks -storepass intermediatepass -file intermediate-ca.csr
+nerunja@xps:~/ws/mTLS$ keytool -gencert -alias root-ca -keystore root-ca.jks -storepass rootpass -infile intermediate-ca.csr -outfile intermediate-ca.cer -validity 3650
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias root-ca -file root-ca.cer -keystore intermediate-ca.jks -storepass intermediatepass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias intermediate-ca -file intermediate-ca.cer -keystore intermediate-ca.jks -storepass intermediatepass
+Certificate reply was installed in keystore
+nerunja@xps:~/ws/mTLS$ keytool -genkeypair -alias server -keyalg RSA -keysize 2048 -keystore server_keystore.jks -validity 365 -storepass serverpass -keypass serverpass -dname "CN=localhost,OU=MyOrg,O=MyCompany,L=MyCity,ST=MyState,C=US"
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 365 days
+        for: CN=localhost, OU=MyOrg, O=MyCompany, L=MyCity, ST=MyState, C=US
+nerunja@xps:~/ws/mTLS$ keytool -genkeypair -alias client -keyalg RSA -keysize 2048 -keystore client_keystore.jks -validity 365 -storepass clientpass -keypass clientpass -dname "CN=client,OU=MyOrg,O=MyCompany,L=MyCity,ST=MyState,C=US"
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 365 days
+        for: CN=client, OU=MyOrg, O=MyCompany, L=MyCity, ST=MyState, C=US
+nerunja@xps:~/ws/mTLS$ keytool -certreq -alias server -keystore server_keystore.jks -storepass serverpass -file server.csr
+nerunja@xps:~/ws/mTLS$ keytool -certreq -alias client -keystore client_keystore.jks -storepass clientpass -file client.csr
+nerunja@xps:~/ws/mTLS$ keytool -gencert -alias intermediate-ca -keystore intermediate-ca.jks -storepass intermediatepass -infile server.csr -outfile server.cer -validity 365
+nerunja@xps:~/ws/mTLS$ keytool -gencert -alias intermediate-ca -keystore intermediate-ca.jks -storepass intermediatepass -infile client.csr -outfile client.cer -validity 365
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias root-ca -file root-ca.cer -keystore server_keystore.jks -storepass serverpass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias intermediate-ca -file intermediate-ca.cer -keystore server_keystore.jks -storepass serverpass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias server -file server.cer -keystore server_keystore.jks -storepass serverpass -noprompt
+Certificate reply was installed in keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias root-ca -file root-ca.cer -keystore client_keystore.jks -storepass clientpass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias intermediate-ca -file intermediate-ca.cer -keystore client_keystore.jks -storepass clientpass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias client -file client.cer -keystore client_keystore.jks -storepass clientpass -noprompt
+Certificate reply was installed in keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias root-ca -file root-ca.cer -keystore server_truststore.jks -storepass serverpass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias intermediate-ca -file intermediate-ca.cer -keystore server_truststore.jks -storepass serverpass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias root-ca -file root-ca.cer -keystore client_truststore.jks -storepass clientpass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$ keytool -importcert -alias intermediate-ca -file intermediate-ca.cer -keystore client_truststore.jks -storepass clientpass -noprompt
+Certificate was added to keystore
+nerunja@xps:~/ws/mTLS$
+
+
+
+
+
+
+
+
+
+
