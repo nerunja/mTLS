@@ -13,7 +13,7 @@ public class SimpleServer {
         System.setProperty("javax.net.debug", "ssl,handshake");
         // Load server's key store
         KeyStore keyStore = KeyStore.getInstance("JKS");
-        keyStore.load(new FileInputStream("server_keystore.jks"), "serverpass".toCharArray());
+        keyStore.load(new FileInputStream("certs/server_keystore.jks"), "serverpass".toCharArray());
 
         // Set up key manager factory
         KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
@@ -21,7 +21,7 @@ public class SimpleServer {
 
         // Load trust store
         KeyStore trustStore = KeyStore.getInstance("JKS");
-        trustStore.load(new FileInputStream("server_truststore.jks"), "serverpass".toCharArray());
+        trustStore.load(new FileInputStream("certs/server_truststore.jks"), "serverpass".toCharArray());
 
         // Set up trust manager factory
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");

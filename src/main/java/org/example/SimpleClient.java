@@ -12,7 +12,7 @@ public class SimpleClient {
         System.setProperty("javax.net.debug", "ssl,handshake");
         // Load client's key store
         KeyStore keyStore = KeyStore.getInstance("JKS");
-        keyStore.load(new FileInputStream("client_keystore.jks"), "clientpass".toCharArray());
+        keyStore.load(new FileInputStream("certs/client_keystore.jks"), "clientpass".toCharArray());
 
         // Set up key manager factory
         KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
@@ -20,7 +20,7 @@ public class SimpleClient {
 
         // Load trust store
         KeyStore trustStore = KeyStore.getInstance("JKS");
-        trustStore.load(new FileInputStream("client_truststore.jks"), "clientpass".toCharArray());
+        trustStore.load(new FileInputStream("certs/client_truststore.jks"), "clientpass".toCharArray());
 
         // Set up trust manager factory
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
